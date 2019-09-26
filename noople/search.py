@@ -7,7 +7,7 @@ common security vulnerabilities, such as XSS and SQLi.
 """
 
 import sqlite3
-from flask import Flask, current_app, request
+from flask import Flask, current_app, escape, request
 
 app = Flask(__name__)
 
@@ -39,7 +39,7 @@ def insert_query(search_query=None):
     cursor = conn.cursor()
 
     # Insert a row of data
-    cursor.executescript("INSERT INTO query VALUES (NULL, '" + search_query + "');")
+    cursor.execute("INSERT INTO query VALUES (NULL, ?);", (search_query,))
 
     # Save (commit) the changes
     conn.commit()
